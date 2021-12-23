@@ -7,15 +7,15 @@ class Smart:
         self.nb_nodes = 0
         self.is_player1 = True
         self.execution_time = 0
+        self.name = "Smart"
 
     def choose_action(self, state):
         start_time = time.time()
         #------------------------------------------------------------
         actions = state.generate_actions()
         max_value = float('-inf')
-        max_action = actions[0]
+        max_action = None
         for action in actions:
-            self.nb_nodes = self.nb_nodes + 1
             wins_action, loss_action = self.calculate_win_loss(action.execute())
             min_value = wins_action / (wins_action + loss_action)
             print(f"{(wins_action), (loss_action)} {min_value} {action.to_string()}")
@@ -28,13 +28,13 @@ class Smart:
         return max_action
 
     def calculate_win_loss(self, state):
+        self.nb_nodes += 1
         if (state.is_final()): return self.utility(state)
         actions = state.generate_actions()
         #print("start calculate win loss\n")
         wins = 0
         loss = 0
         for action in actions:
-            self.nb_nodes += 1
             wins_action, loss_action = self.calculate_win_loss(action.execute())
             wins += wins_action
             loss += loss_action
@@ -60,17 +60,9 @@ class Smart:
             return "Player 2 [ Smart ]"
 
     def utility(self, state):
-        if(state.is_player1()):
-            if(self.is_player1):
-                #lost
-                return (0,1)
-            else:
-                #won
-                return (1,0)
+        if(state.is_player1()!=self.is_player1):
+            #won
+            return (1,0)
         else:
-            if(self.is_player1):
-                #won
-                return (1,0)
-            else:
-                #lost
-                return (0,1)
+            #lost
+            return (0,1)

@@ -7,6 +7,7 @@ class AlphaBeta:
         self.nb_nodes = 0
         self.is_player1 = True
         self.execution_time = 0
+        self.name = "AlphaBeta"
 
     def choose_action(self, state):
         start_time = time.time()
@@ -15,9 +16,8 @@ class AlphaBeta:
         max_value = float('-inf')
         alpha = float('-inf')
         beta = float('inf')
-        max_action = actions[0]
+        max_action = None
         for action in actions:
-            self.nb_nodes = self.nb_nodes + 1
             min_value = self.min_value(action.execute(),alpha,beta)
             if(max_value<min_value):
                 max_value = min_value
@@ -28,11 +28,11 @@ class AlphaBeta:
         return max_action
 
     def max_value(self, state, alpha, beta):
+        self.nb_nodes += 1
         if (state.is_final()): return -1
         actions = state.generate_actions()
         max_value= float('-inf')
         for action in actions:
-            self.nb_nodes = self.nb_nodes + 1
             max_value = max(max_value,self.min_value(action.execute(),alpha,beta))
             if (max_value >= beta):
                 return max_value
@@ -40,11 +40,11 @@ class AlphaBeta:
         return max_value
         
     def min_value(self,state, alpha, beta):
+        self.nb_nodes += 1
         if (state.is_final()): return 1
         actions = state.generate_actions()
         min_value= float('inf')
         for action in actions:
-            self.nb_nodes = self.nb_nodes + 1
             min_value = min(min_value,self.max_value(action.execute(),alpha,beta))
             if(min_value <= alpha):
                 return min_value

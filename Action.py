@@ -4,12 +4,8 @@ class Action:
     def __init__(self, state, index, partition, remainder) -> None:
         self.state = state
         self.index = index
-        if(partition >= remainder):
-            self.partition = partition
-            self.remainder = remainder
-        else:
-            self.partition = remainder
-            self.remainder = partition
+        self.partition = partition
+        self.remainder = remainder
 
     def to_string(self):
         return(f"devide {self.state.array[self.index]} into {self.partition}, {self.remainder}" )

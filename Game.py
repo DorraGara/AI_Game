@@ -4,6 +4,7 @@ from MinMax import MinMax
 from AlphaBeta import AlphaBeta
 from Human import Human
 from Smart import Smart
+from Fastest import Fastest
 import sys
 import time
 
@@ -28,9 +29,44 @@ def play_game(algorithm1, algorithm2, n):
     if(state.is_player1()):
         print(algorithm2.winning_message())
         print(algorithm1.losing_message())
+        return False
     else:
         print(algorithm1.winning_message())
         print(algorithm2.losing_message())
+        return True
 
-play_game(MinMax(), MinMax(), 10)
+
+def statistics(algorithmType, opponentsList, min_n, max_n):
+    test_number = 0
+    wins = 0
+    result = []
+    for index in range(0, max_n - min_n + 1):
+        depth = index + min_n
+        for opponent in opponentsList:
+            player = algorithmType()
+            did_win = play_game(player, opponent, depth)
+            if(did_win):
+                wins+=1
+            else:
+                pass
+            result.append({
+                "algorithm":player.name,
+                "opponent":opponent.name,
+                "nodes_visited":player.nb_nodes,
+                "execution_time":player.execution_time,
+                "did_win":did_win,
+                "depth":depth
+            })
+            test_number+=1
+    print("[")
+    for value in result:
+        print(f"  {value},")
+    print(']')
+    print(wins)
+    return result
+
+
+        
+#statistics(Smart, [MinMax(), AlphaBeta(), Smart(), Fastest()], 3, 15)
+play_game(Human(),MinMax(), 10)
 print("\n")

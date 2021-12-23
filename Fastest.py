@@ -2,12 +2,12 @@ from State import State
 from Action import Action
 import time
 
-class MinMax:
+class Fastest:
     def __init__(self) -> None:
         self.nb_nodes = 0
         self.is_player1 = True
         self.execution_time = 0
-        self.name = "MinMax"
+        self.name = "Fastest"
 
     def choose_action(self, state):
         start_time = time.time()
@@ -16,32 +16,32 @@ class MinMax:
         max_value = float('-inf')
         max_action = None
         for action in actions:
-            min_value = self.min_value(action.execute())
-            if(max_value<min_value):
-                max_value = min_value
-                max_action = action
+            max_action = action
+            if(self.min_value(action.execute()) == 1):
+                break
         #------------------------------------------------------------
         end_time = time.time()
         self.execution_time += (end_time - start_time)*1000
         return max_action
 
     def max_value(self, state):
-        self.nb_nodes += 1
+        self.nb_nodes+=1
         if (state.is_final()): return -1
         actions = state.generate_actions()
-        max_value= float('-inf')
-        for action in actions:         
-            max_value = max(max_value,self.min_value(action.execute()))
-        return max_value
+        for action in actions:          
+            if(self.min_value(action.execute()) == 1):
+                return 1
+        return -1
         
     def min_value(self,state):
-        self.nb_nodes += 1
+        self.nb_nodes+=1
         if (state.is_final()): return 1
         actions = state.generate_actions()
         min_value= float('inf')
         for action in actions:
-            min_value = min(min_value,self.max_value(action.execute()))
-        return min_value
+            if(self.max_value(action.execute())==-1):
+                return -1
+        return 1
     
     def set_player(self, player_number):
         if(player_number==1):
@@ -57,6 +57,6 @@ class MinMax:
     
     def player_message(self):
         if(self.is_player1):
-            return "Player 1 [ MinMax ]"
+            return "Player 1 [ Fastest ]"
         else:
-            return "Player 2 [ MinMax ]"
+            return "Player 2 [ Fastest ]"

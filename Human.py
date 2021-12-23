@@ -7,6 +7,7 @@ class Human:
         self.nb_nodes = 0
         self.is_player1 = True
         self.execution_time = 0
+        self.name = "Human"
 
     def choose_action(self, state):
         start_time = time.time()

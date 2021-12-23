@@ -6,14 +6,21 @@ class State:
 
     def generate_actions(self):
         from Action import Action
-        result = []
+        #result = []
+        checked = {}
         for i in range(self.taille):
             if (self.array[i]>2):
-                x=1
-                while(x<self.array[i]-x):
-                    result.append(Action(self,i,self.array[i]-x,x))
-                    x=x+1
-        return result
+                remainder = 1
+                partition = self.array[i] - remainder
+                while(remainder < partition):
+                    if(not f"{self.array[i]}=>({partition},{remainder})" in checked):
+                        #result.append(Action(self,index=i, partition=partition, remainder=remainder))
+                        yield Action(self,index=i, partition=partition, remainder=remainder)
+                        checked[f"{self.array[i]}=>({partition},{remainder})"] = True
+                    remainder += 1
+                    partition = self.array[i] - remainder
+    
+
 
     def to_string(self):
         return self.array
